@@ -31,17 +31,19 @@ const PokemonListPage = () => {
 
   return (
     <Container title={"Pokemon List"}>
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {character.map((item, index) => (
           <Card key={index}>
             <img
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
                 index + 1
               }.png`}
-              className="w-36 h-36"
+              className="w-36 h-36 md:w-48 md:h-48 lg:w-64 lg:h-64"
               alt={item.name}
             />
-            <p className="font-semibold">{item.name}</p>
+            <p className="font-semibold text-black">
+              {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
+            </p>
           </Card>
         ))}
       </div>
