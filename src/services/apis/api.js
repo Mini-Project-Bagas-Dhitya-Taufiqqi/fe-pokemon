@@ -32,4 +32,21 @@ export const getDetailPokemon = async (url) => {
   }
 };
 
-export default { getAllPokemon, getDetailPokemon };
+export const getDetailCharacter = async (name) => {
+  try {
+    const response = await axios.get(
+      `https://pokeapi.co/api/v2/pokemon/${name}/`
+    );
+    return {
+      status: "success",
+      data: response.data,
+    };
+  } catch (error) {
+    return {
+      status: "failed",
+      message: error,
+    };
+  }
+};
+
+export default { getAllPokemon, getDetailPokemon, getDetailCharacter };

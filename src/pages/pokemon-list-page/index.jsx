@@ -1,19 +1,26 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Container from "../../components/Container";
 import Card from "../../components/Card";
+import Loading from "../../components/Loading";
 
 import { getAllPokemon, getDetailPokemon } from "../../services/apis/api";
 
 const PokemonListPage = () => {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const [character, setCharacter] = useState([]);
 
   const getPokemonList = async () => {
     const pokemonData = await getAllPokemon(10);
-    setCharacter(pokemonData.data.results);
-
-    pokemonData.data.results.forEach((pokemon) => {
-      getPokemonDetail(pokemon.url);
-    });
+    const pokemonList = await Promise.all(
+      pokemonData.data.results.map(async (pokemon) => {
+        const detail = await getPokemonDetail(pokemon.url);
+        return { ...pokemon, detail };
+      })
+    );
+    setCharacter(pokemonList);
+    setIsLoading(false);
   };
 
   const getPokemonDetail = async (url) => {
@@ -29,11 +36,30 @@ const PokemonListPage = () => {
     getPokemonList();
   }, []);
 
+  const handleClickPokemon = (name, index) => {
+    navigate("/pokemon-detail", {
+      state: {
+        name: name,
+        image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+          index + 1
+        }.png`,
+      },
+    });
+  };
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <Container title={"Pokemon List"}>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {character.map((item, index) => (
-          <Card key={index}>
+          <Card
+            type={"list"}
+            key={index}
+            onClick={() => handleClickPokemon(item.name, index)}
+          >
             <img
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
                 index + 1
