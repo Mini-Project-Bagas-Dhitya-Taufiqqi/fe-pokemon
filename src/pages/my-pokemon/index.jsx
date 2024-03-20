@@ -10,11 +10,11 @@ const MyPokemon = () => {
   return (
     <Container title={"My Pokemon"}>
       <div className="h-screen">
-        <div className="h-max w-max grid grid-cols-2 gap-10">
+        <div className="h-max w-max grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-2 gap-10">
           {capturedPokemons
             ? capturedPokemons?.map((item) => {
                 return (
-                  <Card type={"information"}>
+                  <Card type={"information"} key={item.name}>
                     <div className="mr-20">
                       <img src={item?.image} alt="" />
                       <p className="text-black font-normal">
