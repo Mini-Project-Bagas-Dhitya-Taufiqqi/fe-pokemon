@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import Swal from "sweetalert2";
 import Container from "../../components/Container";
 import Card from "../../components/Card";
 import Loading from "../../components/Loading";
 
+import { usePokemonContext } from "../../services/context/PokemonContext";
 import { getDetailCharacter } from "../../services/apis/api";
 
 const PokemonDetail = () => {
   const location = useLocation();
   const name = location?.state?.name;
   const image = location?.state?.image;
+  const { capturePokemon } = usePokemonContext();
 
   const [pokemonInfo, setPokemonInfo] = useState(null);
   const [nickname, setNickname] = useState("");
@@ -31,14 +34,52 @@ const PokemonDetail = () => {
   const catchPokemon = () => {
     const random = Math.random();
     if (random < 0.5) {
-      setCaptured(true);
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: `Gotcha! You have gained ${random}`,
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Claim",
+      }).then((res) => {
+        if (res.isConfirmed) {
+          setCaptured(true);
+          const capturedPokemon = {
+            name,
+            nickname,
+            image,
+            abilities: pokemonInfo?.data?.abilities,
+            base_experience: pokemonInfo?.data?.base_experience,
+            height: pokemonInfo?.data?.height,
+            weight: pokemonInfo?.data?.weight,
+            location_area_encounters:
+              pokemonInfo?.data?.location_area_encounters,
+          };
+          capturePokemon(capturedPokemon);
+        }
+      });
     } else {
-      setCaptured(false);
+      Swal.fire({
+        icon: "error",
+        title: "Failed",
+        text: `Please try again`,
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      }).then((res) => {
+        if (res.isConfirmed) {
+          setCaptured(false);
+        }
+      });
     }
   };
 
   const addToMyPokemonList = () => {
-    alert("Pokemon added to My Pokemon List");
+    Swal.fire({
+      icon: "success",
+      title: "Success",
+      text: "Pokemon added to My Pokemon List!",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "OK",
+    });
   };
 
   if (loading) {
@@ -52,7 +93,7 @@ const PokemonDetail = () => {
       }`}
     >
       <div className="h-full">
-        <div className="h-96">
+        <div className="h-screen">
           {pokemonInfo?.data && (
             <Card type={"information"}>
               <img
@@ -86,13 +127,6 @@ const PokemonDetail = () => {
                 </p>
                 {!captured && (
                   <div className="mt-20 space-x-10">
-                    <input
-                      type="text"
-                      placeholder="Enter nickname"
-                      className="p-3 rounded-md bg-slate-100 focus:outline-none"
-                      value={nickname}
-                      onChange={(e) => setNickname(e.target.value)}
-                    />
                     <button
                       className="bg-cyan-700 hover:bg-cyan-800 focus:outline-none border-none text-white"
                       onClick={catchPokemon}
