@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
+import Navbar from "../components/Navbar";
+
 import PokemonListPage from "../pages/pokemon-list-page";
 import PokemonDetail from "../pages/pokemon-detail";
 import MyPokemon from "../pages/my-pokemon";
@@ -8,6 +10,7 @@ import MyPokemon from "../pages/my-pokemon";
 const PokemonRouter = () => {
   return (
     <BrowserRouter>
+      <Navbar />
       <AnimatePresence mode="wait">
         <Routes>
           <Route
