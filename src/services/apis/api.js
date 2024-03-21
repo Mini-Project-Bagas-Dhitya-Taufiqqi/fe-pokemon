@@ -49,4 +49,28 @@ export const getDetailCharacter = async (name) => {
   }
 };
 
-export default { getAllPokemon, getDetailPokemon, getDetailCharacter };
+export const catchPokemon = async () => {
+  try {
+    const response = await axios.get(
+      `https://noon-neighborly-bobcat.glitch.me/catch-pokemon`
+    );
+    console.log("suc : ", response?.data);
+    return {
+      status: "success",
+      data: response.data,
+    };
+  } catch (error) {
+    console.log("err : ", error);
+    return {
+      status: "failed",
+      message: error,
+    };
+  }
+};
+
+export default {
+  getAllPokemon,
+  getDetailPokemon,
+  getDetailCharacter,
+  catchPokemon,
+};

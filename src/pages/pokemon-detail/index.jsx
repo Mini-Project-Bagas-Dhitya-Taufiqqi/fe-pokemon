@@ -6,7 +6,7 @@ import Card from "../../components/Card";
 import Loading from "../../components/Loading";
 
 import { usePokemonContext } from "../../services/context/PokemonContext";
-import { getDetailCharacter } from "../../services/apis/api";
+import { getDetailCharacter, catchPokemon } from "../../services/apis/api";
 
 const PokemonDetail = () => {
   const location = useLocation();
@@ -31,13 +31,13 @@ const PokemonDetail = () => {
     }
   }, [name]);
 
-  const catchPokemon = () => {
-    const random = Math.random();
-    if (random < 0.5) {
+  const generatePokemon = async () => {
+    const result = await catchPokemon();
+    if (result?.data?.probability === "Success") {
       Swal.fire({
         icon: "success",
         title: "Success",
-        text: `Gotcha! You have gained ${random}`,
+        text: `Gotcha! You have gained ${result?.data?.probability}`,
         confirmButtonColor: "#3085d6",
         confirmButtonText: "Claim",
       }).then((res) => {
@@ -129,7 +129,7 @@ const PokemonDetail = () => {
                   <div className="mt-20 space-x-10">
                     <button
                       className="bg-cyan-700 hover:bg-cyan-800 focus:outline-none border-none text-white"
-                      onClick={catchPokemon}
+                      onClick={generatePokemon}
                     >
                       Catch Pokemon
                     </button>
