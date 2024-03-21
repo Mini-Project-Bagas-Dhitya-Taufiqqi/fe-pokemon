@@ -9,4 +9,4 @@ Releasing Pokemon
 Checking for prime numbers
 
 **Deployment**
-The project is deployed and accessible at https://awesome-pokemon-go.netlify.app/.
+The project is deployed and accessible at https://awesome-pokemon-go.vercel.app/
