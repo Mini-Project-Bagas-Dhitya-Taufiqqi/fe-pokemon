@@ -1,11 +1,45 @@
-import React from "react";
+import React, { useEffect } from "react";
+import Swal from "sweetalert2";
 import Container from "../../components/Container";
 import Card from "../../components/Card";
 
 import { usePokemonContext } from "../../services/context/PokemonContext";
+import { releasePokemon } from "../../services/apis/api";
 
 const MyPokemon = () => {
   const { capturedPokemons } = usePokemonContext();
+
+  const generateReleasePokemon = async (name) => {
+    const randomNumber = Math.floor(Math.random() * (20 - 1 + 1) + 1);
+    const result = await releasePokemon(randomNumber);
+    if (result.data.isPrimeNumber === true) {
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: `Prime number founded, sucess release your ${name}!`,
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Failed",
+        text: `Prime number not founded, failed release and try again!`,
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      });
+    }
+  };
+
+  useEffect(() => {
+    Swal.fire({
+      icon: "info",
+      title: "Rules",
+      text: "To release a Pokemon, the system will check if the generated number is prime. If it is prime, the release will be successful.",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "OK",
+    });
+  }, []);
 
   return (
     <Container title={"My Pokemon"}>
@@ -47,6 +81,14 @@ const MyPokemon = () => {
                       <p>
                         <b>Weight:</b> {item?.weight}
                       </p>
+                      <div className="mt-10 w-full">
+                        <button
+                          className="w-full text-white font-semibold bg-green-500"
+                          onClick={() => generateReleasePokemon(item?.nickname)}
+                        >
+                          Release
+                        </button>
+                      </div>
                     </div>
                   </Card>
                 );

@@ -54,6 +54,48 @@ export const catchPokemon = async () => {
     const response = await axios.get(
       `https://noon-neighborly-bobcat.glitch.me/catch-pokemon`
     );
+    return {
+      status: "success",
+      data: response.data,
+    };
+  } catch (error) {
+    return {
+      status: "failed",
+      message: error,
+    };
+  }
+};
+
+export const releasePokemon = async (number) => {
+  try {
+    const response = await axios.post(
+      `https://noon-neighborly-bobcat.glitch.me/release-pokemon`,
+      {
+        number,
+      }
+    );
+    console.log("suc : ", response?.data);
+    return {
+      status: "success",
+      data: response.data,
+    };
+  } catch (error) {
+    console.log("err : ", error);
+    return {
+      status: "failed",
+      message: error,
+    };
+  }
+};
+
+export const renamePokemon = async (number) => {
+  try {
+    const response = await axios.put(
+      `https://noon-neighborly-bobcat.glitch.me/rename-pokemon`,
+      {
+        number,
+      }
+    );
     console.log("suc : ", response?.data);
     return {
       status: "success",
@@ -73,4 +115,6 @@ export default {
   getDetailPokemon,
   getDetailCharacter,
   catchPokemon,
+  releasePokemon,
+  renamePokemon,
 };
